@@ -1,5 +1,8 @@
-streamlit==1.25.0
-firebase-admin==6.1.0
-googlemaps==4.7.3
-pandas==2.1.2
-python-dateutil==2.8.2
+pillow==9.4.0  # Replace with a compatible version, e.g., for Python 3.8/3.9
+streamlit
+googlemaps
+firebase-admin
+streamlit-folium
+pandas
+setuptools>=58.0.4
+wheel>=0.38.4
