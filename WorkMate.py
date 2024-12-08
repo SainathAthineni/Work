@@ -9,7 +9,7 @@ from streamlit_folium import st_folium
 try:
     firebase_app = get_app()
 except ValueError:
-    cred = credentials.Certificate("C:/Users/saina/WorkMate/workmate-643db-firebase-adminsdk-wpb64-428d916b6e.json")
+    cred = credentials.Certificate("workmate-643db-firebase-adminsdk-wpb64-428d916b6e.json")
     firebase_app = initialize_app(cred)
 
 db = firestore.client()
