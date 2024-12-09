@@ -1,5 +1,6 @@
 import streamlit as st
 from firebase_admin import credentials, firestore, auth, initialize_app, get_app
+import base64
 from datetime import datetime
 import googlemaps
 import folium
