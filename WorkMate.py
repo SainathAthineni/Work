@@ -9,31 +9,22 @@ import googlemaps
 import folium
 from streamlit_folium import st_folium
 
-# Firebase initialization using st.secrets
+# Firebase initialization
 try:
-    # Ensure FIREBASE_JSON is properly formatted as JSON in Streamlit secrets
-    firebase_json = json.loads(st.secrets["FIREBASE_JSON"])
+    firebase_json = dict(st.secrets["FIREBASE_JSON"])  # Fetching nested keys
     cred = credentials.Certificate(firebase_json)
     initialize_app(cred)
-    db = firestore.client()
     st.success("Firebase initialized successfully.")
-except KeyError as key_err:
-    st.error(f"Missing key in secrets: {key_err}")
-except json.JSONDecodeError as json_err:
-    st.error(f"Invalid JSON format in FIREBASE_JSON: {json_err}")
 except Exception as e:
     st.error(f"Error initializing Firebase: {e}")
 
-    
-# Google Maps API initialization
+# Google Maps API Key initialization
 try:
     google_maps_api_key = st.secrets["google_maps_api_key"]
     gmaps_client = googlemaps.Client(key=google_maps_api_key)
-    st.success("Google Maps API client initialized successfully.")
-except KeyError as key_err:
-    st.error(f"Missing Google Maps API Key: {key_err}")
+    st.success("Google Maps API initialized successfully.")
 except Exception as e:
-    st.error(f"Error initializing Google Maps API client: {e}")
+    st.error(f"Error initializing Google Maps API: {e}")
 
 
 # Initialize session state
