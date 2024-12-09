@@ -18,8 +18,9 @@ try:
 except Exception as e:
     st.error(f"Error initializing Firebase: {e}")
     
-# Access Google Maps API key
+# Use the Google Maps API Key from Streamlit secrets
 google_maps_api_key = st.secrets["google_maps_api_key"]
+gmaps_client = googlemaps.Client(key=google_maps_api_key)
 
 # Initialize session state
 if "user_email" not in st.session_state:
