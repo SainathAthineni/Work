@@ -9,12 +9,12 @@ import googlemaps
 import folium
 from streamlit_folium import st_folium
 
-# Read Firebase JSON from Streamlit secrets
+# Firebase initialization using st.secrets
 try:
-    firebase_config = json.loads(st.secrets["firebase"]["FIREBASE_JSON"])
-    cred = credentials.Certificate(firebase_config)
-    app = firebase_admin.initialize_app(cred)
-    print("Firebase initialized successfully!")
+    firebase_json = json.loads(st.secrets["FIREBASE_JSON"])
+    cred = credentials.Certificate(firebase_json)
+    initialize_app(cred)
+    db = firestore.client()
 except Exception as e:
     st.error(f"Error initializing Firebase: {e}")
     
