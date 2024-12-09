@@ -13,7 +13,7 @@ from streamlit_folium import st_folium
 firebase_key_b64 = st.secrets["firebase_key_b64"]
 
 # Decode Firebase key and save it to a JSON file
-firebase_key_path = "firebase-key.json"
+firebase_key_path = "firebase-key_b64"
 with open(firebase_key_path, "wb") as file:
     file.write(base64.b64decode(firebase_key_b64))
 
