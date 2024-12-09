@@ -7,23 +7,25 @@ import folium
 from streamlit_folium import st_folium
 
 # Path to the Base64 file
-BASE64_FILE = "tmp.txt"  # Update this with the path to your uploaded Base64 file
+BASE64_FILE = "tmp.txt"  # Ensure this matches your uploaded Base64 file name
 
 # Decode Base64 and save the Firebase key to a temporary file
-with open(BASE64_FILE, "r") as file:
-    base64_content = file.read()
-
 firebase_key_path = "firebase-key.json"
-with open(firebase_key_path, "wb") as json_file:
-    json_file.write(base64.b64decode(base64_content))
+if not os.path.exists(firebase_key_path):
+    with open(BASE64_FILE, "r") as file:
+        base64_content = file.read()
+
+    with open(firebase_key_path, "wb") as json_file:
+        json_file.write(base64.b64decode(base64_content))
 
 # Initialize Firebase
 try:
-    app = firebase_admin.get_app()
+    app = firebase_admin.get_app()  # Check if the app is already initialized
 except ValueError:
     cred = credentials.Certificate(firebase_key_path)
-    firebase_admin.initialize_app(cred)
+    app = firebase_admin.initialize_app(cred)
 
+# Initialize Firestore
 db = firestore.client()
 
 gmaps_client = googlemaps.Client(key="AIzaSyAqdU_AH-TkRy7_IyOkxV3MKEK1XI-tmUk")
