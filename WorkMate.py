@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from firebase_admin import credentials, firestore, auth, initialize_app, get_app
 import base64
@@ -6,27 +7,38 @@ import googlemaps
 import folium
 from streamlit_folium import st_folium
 
-# Path to the Base64 file
-BASE64_FILE = "tmp.txt"  # Ensure this matches your uploaded Base64 file name
 
-# Decode Base64 and save the Firebase key to a temporary file
+# Path to the Base64-encoded file and Firebase key output file
+BASE64_FILE = "tmp.txt"  # Ensure this matches the uploaded file name
 firebase_key_path = "firebase-key.json"
-if not os.path.exists(firebase_key_path):
-    with open(BASE64_FILE, "r") as file:
-        base64_content = file.read()
 
-    with open(firebase_key_path, "wb") as json_file:
-        json_file.write(base64.b64decode(base64_content))
+# Decode Base64 and save the Firebase key to a file
+if not os.path.exists(firebase_key_path):
+    try:
+        with open(BASE64_FILE, "r") as file:
+            base64_content = file.read()
+
+        with open(firebase_key_path, "wb") as json_file:
+            json_file.write(base64.b64decode(base64_content))
+    except Exception as e:
+        raise RuntimeError(f"Error decoding Base64 file: {e}")
 
 # Initialize Firebase
 try:
     app = firebase_admin.get_app()  # Check if the app is already initialized
 except ValueError:
-    cred = credentials.Certificate(firebase_key_path)
-    app = firebase_admin.initialize_app(cred)
+    try:
+        cred = credentials.Certificate(firebase_key_path)
+        app = firebase_admin.initialize_app(cred)
+    except Exception as e:
+        raise RuntimeError(f"Error initializing Firebase: {e}")
 
 # Initialize Firestore
-db = firestore.client()
+try:
+    db = firestore.client()
+except Exception as e:
+    raise RuntimeError(f"Error initializing Firestore: {e}")
+
 
 gmaps_client = googlemaps.Client(key="AIzaSyAqdU_AH-TkRy7_IyOkxV3MKEK1XI-tmUk")
 
