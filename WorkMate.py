@@ -9,31 +9,15 @@ import googlemaps
 import folium
 from streamlit_folium import st_folium
 
-# Load the Firebase JSON key from Streamlit secrets
+# Read Firebase JSON from Streamlit secrets
 try:
-    firebase_json = st.secrets["FIREBASE_JSON"]
-    firebase_config = json.loads(firebase_json)
-except KeyError:
-    st.error("FIREBASE_JSON not found in Streamlit secrets. Please add it.")
-    st.stop()  # Stop execution if the secret is missing
-except Exception as e:
-    st.error(f"Error loading Firebase JSON: {e}")
-    st.stop()
-
-# Initialize Firebase Admin SDK
-try:
-    app = firebase_admin.get_app()  # Check if already initialized
-except ValueError:
+    firebase_config = json.loads(st.secrets["firebase"]["FIREBASE_JSON"])
     cred = credentials.Certificate(firebase_config)
     app = firebase_admin.initialize_app(cred)
-
-# Initialize Firestore
-try:
-    db = firestore.client()
+    print("Firebase initialized successfully!")
 except Exception as e:
-    st.error(f"Error initializing Firestore: {e}")
-    st.stop()
-
+    st.error(f"Error initializing Firebase: {e}")
+    
 # Access Google Maps API key
 google_maps_api_key = st.secrets["google_maps_api_key"]
 
