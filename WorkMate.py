@@ -6,17 +6,12 @@ import folium
 from streamlit_folium import st_folium
 
 # Firebase Initialization
-##   firebase_app = get_app()
-#except ValueError:
-   # cred = credentials.Certificate("workmate-643db-firebase-adminsdk-wpb64-428d916b6e.json")
-   # firebase_app = initialize_app(cred)
+  firebase_app = get_app()
+except ValueError:
+   cred = credentials.Certificate("workmate-643db-firebase-adminsdk-wpb64-428d916b6e.json")
+   firebase_app = initialize_app(cred)
 
-#db = firestore.client()#*
-# Load JSON key from environment variable
-service_account_key = json.loads(os.getenv("workmate-643db-firebase-adminsdk-wpb64-428d916b6e.json"))
-
-cred = credentials.Certificate(service_account_key)
-firebase_app = initialize_app(cred)
+db = firestore.client()
 gmaps_client = googlemaps.Client(key="AIzaSyAqdU_AH-TkRy7_IyOkxV3MKEK1XI-tmUk")
 
 # Initialize session state
