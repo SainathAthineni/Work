@@ -1,5 +1,6 @@
 import os
 import streamlit as st
+import firebase_admin
 from firebase_admin import credentials, firestore, auth, initialize_app, get_app
 import base64
 from datetime import datetime
