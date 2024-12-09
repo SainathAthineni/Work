@@ -25,7 +25,7 @@ except Exception as e:
     st.error(f"Error initializing Firebase: {e}")
 
     
-# Use the Google Maps API Key from Streamlit secrets
+# Google Maps API initialization
 try:
     google_maps_api_key = st.secrets["google_maps_api_key"]
     gmaps_client = googlemaps.Client(key=google_maps_api_key)
