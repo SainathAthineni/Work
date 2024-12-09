@@ -5,14 +5,26 @@ import googlemaps
 import folium
 from streamlit_folium import st_folium
 
-# Firebase Initialization
+# Path to the Base64 file
+BASE64_FILE = "tmp.txt"  # Update this with the path to your uploaded Base64 file
+
+# Decode Base64 and save the Firebase key to a temporary file
+with open(BASE64_FILE, "r") as file:
+    base64_content = file.read()
+
+firebase_key_path = "firebase-key.json"
+with open(firebase_key_path, "wb") as json_file:
+    json_file.write(base64.b64decode(base64_content))
+
+# Initialize Firebase
 try:
-    firebase_app = get_app()
+    app = firebase_admin.get_app()
 except ValueError:
-    cred = credentials.Certificate("workmate-643db-firebase-adminsdk-wpb64-428d916b6e.json")
-    firebase_app = initialize_app(cred)
+    cred = credentials.Certificate(firebase_key_path)
+    firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+
 gmaps_client = googlemaps.Client(key="AIzaSyAqdU_AH-TkRy7_IyOkxV3MKEK1XI-tmUk")
 
 # Initialize session state
