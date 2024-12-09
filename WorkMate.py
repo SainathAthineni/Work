@@ -8,36 +8,30 @@ import googlemaps
 import folium
 from streamlit_folium import st_folium
 
-# Decode Base64 Firebase key from Streamlit secrets
-firebase_key_path = "firebase-key.json"
-
-# Check if Firebase key file already exists, otherwise create it
-if not os.path.exists(firebase_key_path):
-    try:
-        with open(firebase_key_path, "wb") as json_file:
-            json_file.write(base64.b64decode(st.secrets["FIREBASE_KEY"]))
-    except KeyError:
-        st.error("FIREBASE_KEY not found in Streamlit secrets. Please add it.")
-        st.stop()  # Stop execution if the secret is missing
+# Load the Firebase JSON key from Streamlit secrets
+try:
+    firebase_json = st.secrets["FIREBASE_JSON"]
+    firebase_config = json.loads(firebase_json)
+except KeyError:
+    st.error("FIREBASE_JSON not found in Streamlit secrets. Please add it.")
+    st.stop()  # Stop execution if the secret is missing
+except Exception as e:
+    st.error(f"Error loading Firebase JSON: {e}")
+    st.stop()
 
 # Initialize Firebase Admin SDK
 try:
     app = firebase_admin.get_app()  # Check if already initialized
 except ValueError:
-    try:
-        cred = credentials.Certificate(firebase_key_path)
-        app = firebase_admin.initialize_app(cred)
-    except Exception as e:
-        st.error(f"Failed to initialize Firebase: {e}")
-        st.stop()  # Stop execution if Firebase initialization fails
+    cred = credentials.Certificate(firebase_config)
+    app = firebase_admin.initialize_app(cred)
 
 # Initialize Firestore
 try:
     db = firestore.client()
 except Exception as e:
-    st.error(f"Failed to initialize Firestore: {e}")
-    st.stop()  # Stop execution if Firestore initialization fails
-
+    st.error(f"Error initializing Firestore: {e}")
+    st.stop()
 
 # Access Google Maps API key
 google_maps_api_key = st.secrets["google_maps_api_key"]
